@@ -11,9 +11,13 @@ logger = logging.getLogger(__name__)
 
 # 初始化 OpenAI 客户端
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
+    api_key=os.getenv("DASHSCOPE_API_KEY"),  # 改为从环境变量获取
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
+
+# 检查 API Key 是否成功获取
+if not client.api_key:
+    raise ValueError("❌ ERROR: DASHSCOPE_API_KEY 环境变量未设置，请检查 Render 配置！")
 
 app = FastAPI()
 
