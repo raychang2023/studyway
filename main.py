@@ -21,6 +21,10 @@ if not client.api_key:
 
 app = FastAPI()
 
+@app.get("/")
+async def root():
+    return {"message": "API is running!"}
+
 # 配置 CORS
 app.add_middleware(
     CORSMiddleware,
