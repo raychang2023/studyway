@@ -133,6 +133,5 @@ def generate_content(prompt: str) -> str:
         logger.error(f"调用 API 时发生错误: {str(e)}")
         raise HTTPException(status_code=500, detail=f"生成过程中出现错误: {str(e)}")
 
-if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8006) 
