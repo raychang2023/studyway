@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 import logging
+import os
 
 # 设置日志
 logging.basicConfig(level=logging.INFO)
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 # 初始化 OpenAI 客户端
 client = OpenAI(
-    api_key="sk-422f2f8e12fb4319993b78542bd9f00b",
+    api_key=os.getenv("OPENAI_API_KEY"),
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 
