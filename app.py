@@ -110,6 +110,10 @@ def generate_content(prompt: str) -> str:
         logger.error(f"调用 OpenAI API 失败: {str(e)}")
         raise Exception("AI 生成失败，请检查 API Key 是否正确")
 
-# ✅ 10. 运行 Flask
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+
+# 获取环境变量 PORT，默认值 8080（适用于本地）
+PORT = int(os.getenv("PORT", 8080))
+
+if __name__ == '__main__':
+    # 在生产环境中，不要使用 debug=True，防止安全问题
+    app.run(host='0.0.0.0', port=PORT)
