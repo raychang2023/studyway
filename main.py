@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
-from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import logging
 import os
@@ -21,17 +20,10 @@ client = OpenAI(
 if not client.api_key:
     raise ValueError("❌ ERROR: DASHSCOPE_API_KEY 环境变量未设置，请检查 Render 配置！")
 
+# 初始化 FastAPI
 app = FastAPI()
 
-@app.get("/")
-async def serve_index():
-    return FileResponse("index.html")  # 确保 index.html 在根目录
-    
-@app.get("/")
-async def root():
-    return {"message": "API is running!"}
-
-# 更新 CORS 配置
+# 允许跨域请求 (CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 允许所有域名，简化测试
@@ -39,6 +31,17 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# 获取当前目录路径
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# ✅ 统一的 "/" 入口
+@app.get("/")
+async def serve_index():
+    index_path = os.path.join(BASE_DIR, "index.html")
+    if not os.path.exists(index_path):
+        raise HTTPException(status_code=404, detail="index.html not found")
+    return FileResponse(index_path)
 
 class Topic(BaseModel):
     topic: str
@@ -147,5 +150,8 @@ def generate_content(prompt: str) -> str:
         logger.error(f"调用 API 时发生错误: {str(e)}")
         raise HTTPException(status_code=500, detail=f"生成过程中出现错误: {str(e)}")
 
+# ✅ 确保 `uvicorn.run()` 只在本地运行
+if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8006) 
+    uvicorn.run(app, host="0.0.0.0", port=8006)
+
