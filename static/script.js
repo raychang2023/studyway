@@ -86,17 +86,30 @@ async function generateTopic() {
     resultDiv.innerHTML = '';
 
     try {
-        const response = await fetch('https://studyway.onrender.com/generate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            mode: 'cors',
-            body: JSON.stringify({
-                topic: topicInput.value
-            })
-        });
+        // 添加重试逻辑
+        let retries = 3;
+        let response;
+        
+        while (retries > 0) {
+            try {
+                response = await fetch('https://studyway.onrender.com/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    mode: 'cors',
+                    body: JSON.stringify({
+                        topic: topicInput.value
+                    })
+                });
+                break;  // 如果请求成功，跳出循环
+            } catch (error) {
+                retries--;
+                if (retries === 0) throw error;
+                await new Promise(resolve => setTimeout(resolve, 2000));  // 等待2秒后重试
+            }
+        }
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
