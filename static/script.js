@@ -93,7 +93,6 @@ async function generateTopic() {
                 'Accept': 'application/json'
             },
             mode: 'cors',
-            credentials: 'same-origin',
             body: JSON.stringify({
                 topic: topicInput.value
             })
