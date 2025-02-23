@@ -86,7 +86,7 @@ async function generateTopic() {
     resultDiv.innerHTML = '';
 
     try {
-        const response = await fetch('/generate', {  // 更新端口号
+        const response = await fetch('https://studyway.onrender.com/generate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
