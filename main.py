@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import logging
 import os
 
@@ -21,6 +23,10 @@ if not client.api_key:
 
 app = FastAPI()
 
+@app.get("/")
+async def serve_index():
+    return FileResponse("index.html")  # 确保 index.html 在根目录
+    
 @app.get("/")
 async def root():
     return {"message": "API is running!"}
