@@ -19,13 +19,13 @@ async function generateTopic() {
     resultDiv.innerHTML = '';
 
     try {
-        const response = await fetch('http://localhost:5000/generate', {
+        const response = await fetch('https://studyway.onrender.com/generate', {  // 修改 API 地址
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            mode: 'cors',  // 添加 CORS 模式
+            mode: 'cors',  // 允许跨域请求
             credentials: 'same-origin',
             body: JSON.stringify({
                 topic: topicInput.value
@@ -178,62 +178,3 @@ function formatLinesForSVG(lines) {
 
     return svg;
 }
-
-function generateDeepLearnSVG(content) {
-    if (!content) return '';
-    
-    // 移除多余的符号和空格
-    content = content.replace(/###\s*\*\*/g, '').replace(/\*\*/g, '').trim();
-    
-    // 分析内容获取实际高度
-    const lines = content.split('\n').filter(Boolean);
-    const estimatedHeight = lines.length * 40 + 100;
-
-    return `
-        <svg width="100%" height="${estimatedHeight}" viewBox="0 0 800 ${estimatedHeight}" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="deepLearnGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#c0392b;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-
-            <!-- 背景卡片 -->
-            <rect x="10" y="10" width="780" height="${estimatedHeight - 20}" 
-                rx="15" ry="15" 
-                fill="url(#deepLearnGradient)"
-                filter="url(#shadow)"
-            />
-
-            ${formatContentToSVG(lines)}
-        </svg>
-    `;
-}
-
-// 格式化每个部分
-function formatSection(content) {
-    if (!content) return '';
-    
-    content = content.trim().replace(/#+\s*/g, '');
-    const sections = content.split(/📌\s*/).filter(Boolean);
-
-    return sections.map(section => {
-        const [title, ...items] = section.split('\n').filter(Boolean);
-
-        // 处理普通列表项
-        if (items.length > 0) {
-            return items.map(item => {
-                const [type, desc] = item.split(/[：:]/);
-                return type && desc ? `
-                    <div class="item">
-                        <span class="item-title">- ${type.trim()}</span>
-                        ${desc.trim()}
-                    </div>
-                ` : '';
-            }).join('');
-        }
-
-        // 如果只有标题，直接显示
-        return `<div class="item">${title}</div>`;
-    }).join('\n');
-} 
