@@ -28,13 +28,10 @@ async def root():
 # 更新 CORS 配置
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://studyway-amber.vercel.app",  # 生产环境
-        "http://localhost:3000",              # 本地开发环境
-    ],
+    allow_origins=["*"],  # 允许所有域名，简化测试
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["Content-Type", "Accept", "Authorization", "X-Requested-With"],
+    allow_headers=["*"],
 )
 
 class Topic(BaseModel):
