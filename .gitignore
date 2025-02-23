@@ -38,3 +38,5 @@ ENV/
 
 # Logs
 *.log 
+.vercel
+.DS_Store
