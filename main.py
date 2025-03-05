@@ -5,6 +5,8 @@ from openai import OpenAI
 from fastapi.responses import FileResponse
 import logging
 import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 # 设置日志
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +25,15 @@ if not client.api_key:
 # 初始化 FastAPI
 app = FastAPI()
 
+# 获取当前目录路径
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# 设置静态文件目录
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# 设置模板目录
+templates = Jinja2Templates(directory="templates")
+
 # 允许跨域请求 (CORS)
 app.add_middleware(
     CORSMiddleware,
@@ -32,16 +43,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 获取当前目录路径
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 # ✅ 统一的 "/" 入口
 @app.get("/")
-async def serve_index():
-    index_path = os.path.join(BASE_DIR, "index.html")
-    if not os.path.exists(index_path):
-        raise HTTPException(status_code=404, detail="index.html not found")
-    return FileResponse(index_path)
+async def serve_index(request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 class Topic(BaseModel):
     topic: str
