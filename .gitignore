@@ -40,3 +40,4 @@ ENV/
 *.log 
 .vercel
 .DS_Store
+.env
