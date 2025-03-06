@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
@@ -32,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 # 设置模板目录
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
 # 允许跨域请求 (CORS)
 app.add_middleware(
@@ -45,7 +45,7 @@ app.add_middleware(
 
 # ✅ 统一的 "/" 入口
 @app.get("/")
-async def serve_index(request):
+async def serve_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 class Topic(BaseModel):
