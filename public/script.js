@@ -92,7 +92,7 @@ async function generateTopic() {
         
         while (retries > 0) {
             try {
-                response = await fetch('/generate', {
+                response = await fetch('https://studyway.onrender.com/generate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
