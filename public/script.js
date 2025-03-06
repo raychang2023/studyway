@@ -92,6 +92,7 @@ async function generateTopic() {
         
         while (retries > 0) {
             try {
+                console.log('Sending request to:', 'https://studyway.onrender.com/generate');
                 response = await fetch('https://studyway.onrender.com/generate', {
                     method: 'POST',
                     headers: {
@@ -99,15 +100,18 @@ async function generateTopic() {
                         'Accept': 'application/json'
                     },
                     mode: 'cors',
+                    credentials: 'omit',
                     body: JSON.stringify({
                         topic: topicInput.value
                     })
                 });
-                break;  // 如果请求成功，跳出循环
+                console.log('Response:', response);
+                break;
             } catch (error) {
+                console.error('Fetch error:', error);
                 retries--;
                 if (retries === 0) throw error;
-                await new Promise(resolve => setTimeout(resolve, 2000));  // 等待2秒后重试
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
         }
 
