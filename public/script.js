@@ -93,15 +93,17 @@ async function generateTopic() {
         while (retries > 0) {
             try {
                 console.log('Sending request to:', 'https://studyway.onrender.com/generate');
+                const data = {
+                    topic: topicInput.value
+                };
                 response = await fetch('https://studyway.onrender.com/generate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Origin': 'https://studyway-eight.vercel.app'
                     },
-                    mode: 'cors',
-                    body: JSON.stringify({
-                        topic: topicInput.value
-                    })
+                    mode: 'no-cors',  // 改为 no-cors 模式
+                    body: JSON.stringify(data)
                 });
                 console.log('Response:', response);
                 break;
