@@ -29,7 +29,7 @@ app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # 设置静态文件目录
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 # 设置模板目录
 templates = Jinja2Templates(directory="templates")
