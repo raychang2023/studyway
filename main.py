@@ -37,7 +37,7 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 # 允许跨域请求 (CORS)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 允许所有域名，简化测试
+    allow_origins=["https://studyway-alpha.vercel.app"],  # 允许的前端域名
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -116,7 +116,7 @@ def create_detailed_prompt(topic: str) -> str:
     请用中文回答，确保内容具体且实用。
     """
 
-@app.post("/generate", response_model=TopicResponse)
+@app.post("/generate")
 async def generate_learning_plan(topic: Topic):
     try:
         # 先生成快速介绍
